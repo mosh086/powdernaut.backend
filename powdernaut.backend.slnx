@@ -9,6 +9,9 @@
     <Project Path="src/Powdernaut.WebApi/Powdernaut.WebApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Powdernaut.Application.Tests/Powdernaut.Application.Tests.csproj" />
     <Project Path="tests/Powdernaut.Domain.Tests/Powdernaut.Domain.Tests.csproj" />
+    <Project Path="tests/Powdernaut.Infrastructure.Tests/Powdernaut.Infrastructure.Tests.csproj" />
+    <Project Path="tests/Powdernaut.WebApi.Tests/Powdernaut.WebApi.Tests.csproj" />
   </Folder>
 </Solution>

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Powdernaut.Application.Common.Models.DTOs;
+﻿using Powdernaut.Application.Common.Models.DTOs;
 using Powdernaut.Application.Providers;
 using Powdernaut.Application.UseCases.Identity.Account.Services;
 using Powdernaut.Application.UseCases.Identity.Authenticate.Handlers.User.Login;

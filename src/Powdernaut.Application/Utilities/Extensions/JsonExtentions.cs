@@ -1,20 +1,22 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using System.Text.Json;
 
 namespace Powdernaut.Application.Utilities.Extensions;
 
 public static class JsonExtentions
 {
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
+    };
+
     public static string ToJson(this object obj)
     {
-        return JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        });
+        return JsonSerializer.Serialize(obj, SerializerOptions);
     }
 
     public static T To<T>(this string str)
     {
-        return JsonConvert.DeserializeObject<T>(str)!;
+        return JsonSerializer.Deserialize<T>(str, SerializerOptions)!;
     }
 }

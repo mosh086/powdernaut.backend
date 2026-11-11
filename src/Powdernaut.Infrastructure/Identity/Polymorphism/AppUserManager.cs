@@ -4,7 +4,6 @@ using Powdernaut.Infrastructure.Identity.Entities.Parameters;
 
 //using Powdernaut.Infrastructure.Identity.Entities.Parameters;
 using Powdernaut.Infrastructure.Identity.Models;
-using Newtonsoft.Json;
 
 namespace Powdernaut.Infrastructure.Identity.Polymorphism;
 
@@ -54,12 +53,12 @@ public class AppUserManager<TUser> : UserManager<TUser> where TUser : UserEntity
         var parameters = new UserTokenParameters(user.Id, LoginProvider, TokenName, tokenValue ?? string.Empty, tokenName);
         if (Context.Set<UserTokenEntity>().Any(item => item.UserId == user.Id && item.LoginProvider == loginProvider))
         {
-            return new IdentityResult<string>(true, JsonConvert.SerializeObject(parameters));
+            return new IdentityResult<string>(true, JsonSerializer.Serialize(parameters));
         }
         var userToken = new UserTokenEntity(parameters);
         await Context.Set<UserTokenEntity>().AddAsync(userToken);
         await Context.SaveChangesAsync();
         await AddLoginAsync(user, new UserLoginInfo(LoginProvider, TokenName, user.UserName));
-        return new IdentityResult<string>(true, JsonConvert.SerializeObject(parameters));
+        return new IdentityResult<string>(true, JsonSerializer.Serialize(parameters));
     }
 }

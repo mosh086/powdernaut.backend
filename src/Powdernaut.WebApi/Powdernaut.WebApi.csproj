@@ -4,7 +4,7 @@
     <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<CodeAnalysisRuleSet>../powdernaut.ruleset</CodeAnalysisRuleSet>
+	<CodeAnalysisRuleSet>../../powdernaut.ruleset</CodeAnalysisRuleSet>
     <UserSecretsId>b9fb0718-2a70-4d1a-afbd-ac0f57b2856a</UserSecretsId>
   </PropertyGroup>
 
@@ -18,18 +18,20 @@
 	<PackageReference Include="FastEndpoints" Version="7.2.0" />
 	<PackageReference Include="MediatR" Version="14.0.0" />
 	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.2" />
-	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="11.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+	<PackageReference Include="Microsoft.OpenApi" Version="3.11.0" />
 	<PackageReference Include="Serilog" Version="4.3.0" />
 	<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 	<PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
 	<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
 	<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 	<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+	<PackageReference Include="SSH.NET" Version="2026.0.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
   </ItemGroup>
 

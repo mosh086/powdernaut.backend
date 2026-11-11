@@ -1,7 +1,7 @@
 ﻿using Powdernaut.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
-using Newtonsoft.Json;
 using System.Net.Mime;
+using System.Text.Json;
 
 namespace Powdernaut.WebApi.Middlewares.ExceptionHandler;
 
@@ -73,12 +73,12 @@ public static class ExceptionMiddlewareExtensions
                         error.Method,
                         error.Message);
 
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(error));
                 }
                 else
                 {
                     logger.LogError("An unknown error occurred");
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiError
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(new ApiError
                     {
                         Message = "An unknown error occurred"
                     }));
