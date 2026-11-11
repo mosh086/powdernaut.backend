@@ -3,7 +3,7 @@ using Powdernaut.Domain.UseCases.Security;
 
 namespace Powdernaut.Application.UseCases.Security.Role.Handlers.AppRole.GetAll;
 
-public class RoleGetAllHandler : Handler<RoleGetAllRequest, List<RoleGetAllResponse>>
+public class RoleGetAllHandler : Handler<RoleGetAllRequest, IEnumerable<RoleGetAllResponse>>
 {
     private readonly IRoleRepository _repository;
     public RoleGetAllHandler(ProviderServices providerServices, IRoleRepository repository) : base(providerServices)
@@ -11,17 +11,17 @@ public class RoleGetAllHandler : Handler<RoleGetAllRequest, List<RoleGetAllRespo
         _repository = repository;
     }
 
-    public override async Task<List<RoleGetAllResponse>> Handle(RoleGetAllRequest request, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<RoleGetAllResponse>> Handle(RoleGetAllRequest request, CancellationToken cancellationToken)
     {
         try
         {
             var data = await _repository.GetAsync(cancellationToken);
-            var result = ProviderServices.Mapper.Map<AppRoleEntity, RoleGetAllResponse>(data);
-            return result.ToList();
+            var roles = ProviderServices.Mapper.Map<IEnumerable<AppRoleEntity>, IEnumerable<RoleGetAllResponse>>(data);
+            return new List<RoleGetAllResponse>(); //Result<IEnumerable<RoleGetAllResponse>>.Ok(roles);
         }
         catch (Exception ex)
         {
-            throw new ApplicationException(ex.Message);
+            return new List<RoleGetAllResponse>(); //Result<IEnumerable<RoleGetAllResponse>>.Fail(500, ex.Message);
         }
     }
 }

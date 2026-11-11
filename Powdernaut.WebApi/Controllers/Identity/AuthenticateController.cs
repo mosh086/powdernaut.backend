@@ -4,6 +4,7 @@ namespace Powdernaut.WebApi.Controllers.Identity;
 
 public class AuthenticateController : BaseController
 {
+    [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<IActionResult> Login(UserLoginRequest request) => await RequestAsync<UserLoginRequest, UserLoginResponse>(request);
 

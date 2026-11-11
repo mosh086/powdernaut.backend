@@ -53,6 +53,14 @@ public static class DependencyInjections
 
         builder.Services.AddSwaggerService();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                builder => builder.WithOrigins("*")
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader());
+        });
+
         //builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
         builder.Services.AddValidatorsFromAssemblies(assemblies);
@@ -84,7 +92,8 @@ public static class DependencyInjections
 
         // Routing and endpoint middleware
         app.UseRouting();
-
+        
+        app.UseCors("AllowSpecificOrigin");
         // Authentication/Authorization
         app.UseAuthentication(); // Authentication must come before Authorization
         app.UseAuthorization();

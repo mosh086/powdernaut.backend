@@ -12,6 +12,6 @@ public class RoleCreateHandler : Handler<RoleCreateRequest, RoleCreateResponse>
     public override async Task<RoleCreateResponse> Handle(RoleCreateRequest request, CancellationToken cancellationToken) 
     {
         var result = await _service.CreateAsync(request);
-        return new RoleCreateResponse($"Create Success Role : { result.Succeeded }");
+        return new RoleCreateResponse(); //Result<RoleCreateResponse>.Ok(new RoleCreateResponse()); //new RoleCreateResponse($"Create Success Role : { result.Succeeded }");
     }
 }

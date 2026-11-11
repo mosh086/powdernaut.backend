@@ -1,4 +1,5 @@
 ﻿using Powdernaut.Application.UseCases.Identity.Account.Services;
+using System.Net.Http.Headers;
 
 namespace Powdernaut.Application.UseCases.Identity.Account.Handlers.User.Register;
 
@@ -38,6 +39,7 @@ public class UserRegisterHandler : Handler<UserRegisterRequest, UserRegisterResp
 
         //await _userRepository.SaveChangeAsync();
         //await _userRepository.CommitTransactionAsync();
-        return new UserRegisterResponse($"Create Success User : ");
+        return new UserRegisterResponse(""); //Result<UserRegisterResponse>.Ok(new UserRegisterResponse($"Create Success User : { restult.Succeeded }"));
+        //return new UserRegisterResponse($"Create Success User : ");
     }
 }

@@ -1,4 +1,4 @@
-﻿using Powdernaut.Application.UseCases.Identity.Account.Handlers.User.Register;
+﻿using Microsoft.AspNetCore.Http;
 using Powdernaut.Application.UseCases.Identity.Account.Services;
 
 namespace Powdernaut.Application.UseCases.Identity.Authenticate.Handlers.User.Login;
@@ -15,7 +15,15 @@ public class UserLoginHandler : Handler<UserLoginRequest, UserLoginResponse>
 
     public override async Task<UserLoginResponse> Handle(UserLoginRequest request, CancellationToken cancellationToken) 
     {
-        (var result, var token ) = await _signInService.PasswordSignInAsync(request);
-        return new UserLoginResponse($"Create Success User : { token?.Token }");
+        try
+        {
+            (var result, var token) = await _signInService.PasswordSignInAsync(request);
+            return new UserLoginResponse(token?.Token ?? string.Empty);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception();
+        }
+        
     }
 }

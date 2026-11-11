@@ -17,11 +17,11 @@ public abstract class Handler<TRequest> : IHandler<TRequest>
 }
 
 public interface IHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
-    where TRequest : RequestModel<TResponse>
+    where TRequest : RequestModel<TResponse> //where TResponse : IResult
 {
 }
 public abstract class Handler<TRequest, TResponse> : IHandler<TRequest, TResponse>
-    where TRequest : RequestModel<TResponse>
+    where TRequest : RequestModel<TResponse> // where TResponse : IResult
 {
     protected readonly ProviderServices ProviderServices;
     protected Handler(ProviderServices providerServices)

@@ -1,9 +1,10 @@
-﻿using Powdernaut.Application.UseCases.Security.User.Repositories;
+﻿using Powdernaut.Application.UseCases.Security.Role.Handlers.AppRole.GetAll;
+using Powdernaut.Application.UseCases.Security.User.Repositories;
 using Powdernaut.Domain.UseCases.Security;
 
 namespace Powdernaut.Application.UseCases.Security.User.Handlers.AppUser.GetAll;
 
-public class UserGetAllHandler : Handler<UserGetAllRequest, List<UserGetAllResponse>>
+public class UserGetAllHandler : Handler<UserGetAllRequest, IEnumerable<UserGetAllResponse>>
 {
     private readonly IUserRepository _repository;
     public UserGetAllHandler(ProviderServices providerServices, IUserRepository repository) : base(providerServices)
@@ -11,19 +12,17 @@ public class UserGetAllHandler : Handler<UserGetAllRequest, List<UserGetAllRespo
         _repository = repository;
     }
 
-    public override async Task<List<UserGetAllResponse>> Handle(UserGetAllRequest request, CancellationToken cancellationToken)
+    public override async Task<IEnumerable<UserGetAllResponse>> Handle(UserGetAllRequest request, CancellationToken cancellationToken)
     {
         try
         {
             var data = await _repository.GetAsync(cancellationToken);
-            var result = ProviderServices.Mapper.Map<AppUserEntity, UserGetAllResponse>(data);
-            return result.ToList();
+            var users = ProviderServices.Mapper.Map<IEnumerable<AppUserEntity>, IEnumerable<UserGetAllResponse>>(data);
+            return new List<UserGetAllResponse>(); //Result<IEnumerable<UserGetAllResponse>>.Ok(users);
         }
         catch (Exception ex)
         {
-            // Log error if needed
-            return new List<UserGetAllResponse>();
-            //return new UserGetAllResponse(Result.Failure(ex.Message));
+            return new List<UserGetAllResponse>(); //Result<IEnumerable<UserGetAllResponse>>.Fail(500, ex.Message);
         }
     }
 }

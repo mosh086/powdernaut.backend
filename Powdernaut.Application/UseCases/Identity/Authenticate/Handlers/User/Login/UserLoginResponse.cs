@@ -1,10 +1,11 @@
 ﻿namespace Powdernaut.Application.UseCases.Identity.Authenticate.Handlers.User.Login;
 
-public class UserLoginResponse : BaseDTO
+public class UserLoginResponse
 {
-    public string Message { get; set; }
-    public UserLoginResponse(string message)
+    public string Token { get; set; } = string.Empty;
+
+    public UserLoginResponse(string token)
     {
-        Message = message;
+        Token = token;
     }
 }

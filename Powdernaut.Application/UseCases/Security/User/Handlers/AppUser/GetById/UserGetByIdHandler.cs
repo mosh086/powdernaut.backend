@@ -16,8 +16,8 @@ public class UserGetByIdHandler : Handler<UserGetByIdRequest, UserGetByIdRespons
         try
         {
             var entity = await _repository.GetAsync(request.EntityId, cancellationToken);
-
-            return ProviderServices.Mapper.Map<AppUserEntity, UserGetByIdResponse>(entity);
+            var result = ProviderServices.Mapper.Map<AppUserEntity, UserGetByIdResponse>(entity);
+            return new UserGetByIdResponse(); //Result<UserGetByIdResponse>.Ok(result);
         }
         catch (Exception ex)
         {
