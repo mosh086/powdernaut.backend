@@ -2,8 +2,13 @@
   <Folder Name="/root/">
     <File Path="powdernaut.ruleset" />
   </Folder>
-  <Project Path="Powdernaut.Application/Powdernaut.Application.csproj" />
-  <Project Path="Powdernaut.Domain/Powdernaut.Domain.csproj" />
-  <Project Path="Powdernaut.Infrastructure/Powdernaut.Infrastructure.csproj" />
-  <Project Path="Powdernaut.WebApi/Powdernaut.WebApi.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/Powdernaut.Application/Powdernaut.Application.csproj" />
+    <Project Path="src/Powdernaut.Domain/Powdernaut.Domain.csproj" />
+    <Project Path="src/Powdernaut.Infrastructure/Powdernaut.Infrastructure.csproj" />
+    <Project Path="src/Powdernaut.WebApi/Powdernaut.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Powdernaut.Domain.Tests/Powdernaut.Domain.Tests.csproj" />
+  </Folder>
 </Solution>
