@@ -9,30 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="AspNetCore.HealthChecks.Network" Version="9.0.0" />
-	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
-	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
-	<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
-	<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
-	<PackageReference Include="Elastic.Serilog.Sinks" Version="9.0.0" />
-	<PackageReference Include="FastEndpoints" Version="7.2.0" />
-	<PackageReference Include="MediatR" Version="14.0.0" />
-	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="11.0.0" />
-	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
+	<PackageReference Include="AspNetCore.HealthChecks.Network" />
+	<PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
+	<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" />
+	<PackageReference Include="AspNetCore.HealthChecks.Uris" />
+	<PackageReference Include="Elastic.Serilog.Sinks" />
+	<PackageReference Include="FastEndpoints" />
+	<PackageReference Include="MediatR" />
+	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Microsoft.OpenApi" Version="3.11.0" />
-	<PackageReference Include="Serilog" Version="4.3.0" />
-	<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
-	<PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
-	<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
-	<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-	<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-	<PackageReference Include="SSH.NET" Version="2026.0.0" />
-	<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
+	<PackageReference Include="Microsoft.OpenApi" />
+	<PackageReference Include="Serilog" />
+	<PackageReference Include="Serilog.AspNetCore" />
+	<PackageReference Include="Serilog.Extensions.Logging" />
+	<PackageReference Include="Serilog.Settings.Configuration" />
+	<PackageReference Include="Serilog.Sinks.Console" />
+	<PackageReference Include="Serilog.Sinks.File" />
+	<PackageReference Include="SSH.NET" />
+	<PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>

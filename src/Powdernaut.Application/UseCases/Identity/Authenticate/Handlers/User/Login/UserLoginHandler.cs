@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Powdernaut.Application.UseCases.Identity.Account.Services;
+﻿using Powdernaut.Application.UseCases.Identity.Account.Services;
 
 namespace Powdernaut.Application.UseCases.Identity.Authenticate.Handlers.User.Login;
 

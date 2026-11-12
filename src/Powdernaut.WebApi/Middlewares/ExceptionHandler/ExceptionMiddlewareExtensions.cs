@@ -1,19 +1,11 @@
-﻿using Powdernaut.Infrastructure.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net.Mime;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.WebUtilities;
+using Powdernaut.Application.Exceptions;
+using Powdernaut.Domain.Exceptions;
+using Powdernaut.Infrastructure.Exceptions;
 using System.Text.Json;
 
 namespace Powdernaut.WebApi.Middlewares.ExceptionHandler;
-
-public class ApiError
-{
-    public string Message { get; set; } = string.Empty;
-    public string Controller { get; set; } = string.Empty;
-    public string Method { get; set; } = string.Empty;
-    public string Error { get; set; } = string.Empty;
-    public string InnerError { get; set; } = string.Empty;
-    public string StackTrace { get; set; } = string.Empty;
-}
 
 public static class ExceptionMiddlewareExtensions
 {
@@ -23,67 +15,66 @@ public static class ExceptionMiddlewareExtensions
         {
             exceptionHandlerApp.Run(async context =>
             {
-                string getMessage(Exception exception)
-                {
-                    if (exception is IdentityException)
-                    {
-                        return string.Join("|", (exception as IdentityException)!.Errors);
-                    }
-                    return exception.Message;
-                }
-
-                var logger = context.RequestServices.GetRequiredService<ILogger<ApiError>>();
+                var logger = context.RequestServices
+                    .GetRequiredService<ILoggerFactory>()
+                    .CreateLogger(nameof(ExceptionMiddlewareExtensions));
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature?.Error;
 
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                context.Response.ContentType = MediaTypeNames.Application.Json;
-
-                if (exception != null)
+                var statusCode = exception switch
                 {
-                    var routeData = context.GetRouteData();
+                    null => StatusCodes.Status500InternalServerError,
+                    UnauthorizedAccessException => StatusCodes.Status403Forbidden,
+                    IdentityException => StatusCodes.Status400BadRequest,
+                    DomainException => StatusCodes.Status400BadRequest,
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status500InternalServerError
+                };
 
-                    var error = new ApiError
-                    {
-                        Message = getMessage(exception),
-                        Controller = routeData?.Values["controller"]?.ToString() ?? context.Request.Path,
-                        Method = routeData?.Values["action"]?.ToString() ?? context.Request.Method,
-                        Error = exception.GetType().Name,
-                        //StackTrace = exception.StackTrace
-                    };
+                context.Response.StatusCode = statusCode;
+                context.Response.ContentType = "application/problem+json";
 
-
-                    // Build inner exception chain
-                    var innerException = exception.InnerException;
-                    if (innerException != null)
-                    {
-                        var innerErrors = new List<string>();
-                        while (innerException != null)
-                        {
-                            innerErrors.Add($"{innerException.GetType().Name}: {innerException.Message}");
-                            innerException = innerException.InnerException;
-                        }
-                        error.InnerError = string.Join(" => ", innerErrors);
-                    }
-
-                    // Log the error
-                    logger.LogError(exception,
-                        "Unhandled exception occurred in {Controller}.{Method}: {ErrorMessage}",
-                        error.Controller,
-                        error.Method,
-                        error.Message);
-
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(error));
-                }
-                else
+                if (exception is null)
                 {
-                    logger.LogError("An unknown error occurred");
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(new ApiError
-                    {
-                        Message = "An unknown error occurred"
-                    }));
+                    logger.LogError("An unknown error occurred while handling the request.");
+                    await WriteProblemDetailsAsync(context, statusCode, "An unexpected error occurred.");
+                    return;
                 }
+
+                var routeData = context.GetRouteData();
+                var controller = routeData?.Values["controller"]?.ToString() ?? context.Request.Path;
+                var method = routeData?.Values["action"]?.ToString() ?? context.Request.Method;
+
+                logger.LogError(exception,
+                    "Unhandled exception occurred in {Controller}.{Method}",
+                    controller,
+                    method);
+
+                var publicMessage = exception switch
+                {
+                    NotFoundException => "The requested resource was not found.",
+                    DomainException => "The request could not be processed.",
+                    IdentityException => "The identity operation could not be completed.",
+                    UnauthorizedAccessException => "You are not authorized to perform this operation.",
+                    _ => "An unexpected error occurred."
+                };
+
+                await WriteProblemDetailsAsync(context, statusCode, publicMessage);
             });
         });
+    }
+
+    private static Task WriteProblemDetailsAsync(HttpContext context, int statusCode, string detail)
+    {
+        var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+        {
+            Status = statusCode,
+            Title = ReasonPhrases.GetReasonPhrase(statusCode),
+            Detail = detail,
+            Instance = context.Request.Path
+        };
+        problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+
+        return context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails, JsonSerializerOptions.Web));
     }
 }
