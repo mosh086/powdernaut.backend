@@ -17,8 +17,6 @@ public static class DependencyInjections
 
         builder.Services.Configure<IdentityOption>(configuration.GetSection("IdentityOption"));
 
-
-
         builder.Host.UseSerilog((context, configuration) =>
         {
             configuration.ReadFrom.Configuration(context.Configuration);
@@ -26,8 +24,6 @@ public static class DependencyInjections
             configuration.WriteTo.File(string.Format("./Logs/File_{0}.txt", DateTime.Now.ToString("yyyy_MM_dd")));
         });
 
-
-        // Add required services
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddHttpClient();
 
@@ -36,14 +32,6 @@ public static class DependencyInjections
         builder.Services.AddApplicationLibrary(configuration, assemblies);
 
         builder.Services.AddInfrastructureLibrary(configuration, assemblies);
-
-        //builder.Services.AddEPPlusExcelSerializer();
-        //  Hangfire
-        //builder.Services.AddHangfireServices(configuration);
-
-        //builder.Services.RegisterHostedService();
-
-        //builder.Services.AddHostedService<MessageBrokerHost>();
 
         builder.Services.AddControllers();
 
@@ -61,24 +49,19 @@ public static class DependencyInjections
                                   .AllowAnyHeader());
         });
 
-        //builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
         builder.Services.AddValidatorsFromAssemblies(assemblies);
 
         return builder.Build();
     }
     public static async Task<WebApplication> ConfigurePipeline(this WebApplication app)
     {
-        // Development-only services
         if (app.Environment.IsDevelopment())
         {
             app.UseSwaggerService();
-            app.MapOpenApi(); // Only map OpenAPI in development
+            app.MapOpenApi();
         }
 
-        // Exception handling
-        app.UseExceptionMiddleware(); // Custom middleware should be early
-                                      // app.UseExceptionHandler(); // Uncomment if using the built-in exception page
+        app.UseExceptionMiddleware(); 
 
         // Static files and HTTPS redirection
         app.UseStaticFiles();
@@ -94,23 +77,14 @@ public static class DependencyInjections
         app.UseRouting();
         
         app.UseCors("AllowSpecificOrigin");
-        // Authentication/Authorization
-        app.UseAuthentication(); // Authentication must come before Authorization
+        
+        app.UseAuthentication();
         app.UseAuthorization();
 
-        // Custom authorization middleware
         app.UseAuthorizedMiddleware();
 
-        // Hangfire dashboard setup
-        //app.UseHangfireServices(); // Should be placed after auth if it relies on it
-
-        // Controllers and endpoints
         app.MapControllers();
 
-        // SPA fallback
-        //app.MapFallbackToFile("index.html");
-
-        // Initialize the database (should be done after services are configured)
         await app.InitialiseDatabaseAsync();
 
         return app;
